@@ -14,8 +14,8 @@ BACKUP_LOG="$(echo /db2/db2[a-z][a-z][a-z]/backup.log)"
   echo '=================='
   tail -15 "$BACKUP_LOG"
   echo '=================='
-  ls -lad /backup/DB2[A-Z][A-Z][A-Z]/[A-Z][A-Z][A-Z].0.db2[a-z][a-z][a-z].* /backup/SBO*/[bB]* 2>/dev/null
+  ls -lad /backup/[A-Z][A-Z][A-Z].0.db2[a-z][a-z][a-z].* /backup/DB2[A-Z][A-Z][A-Z]/[A-Z][A-Z][A-Z].0.db2[a-z][a-z][a-z].* /backup/SBO*/[bB]* 2>/dev/null
   echo '=================='
-  du -hs /backup/DB2[A-Z][A-Z][A-Z]/[A-Z][A-Z][A-Z].0.db2[a-z][a-z][a-z].* /backup/SBO*/[bB]* 2>/dev/null
+  du -hs /backup/[A-Z][A-Z][A-Z].0.db2[a-z][a-z][a-z].* /backup/DB2[A-Z][A-Z][A-Z]/[A-Z][A-Z][A-Z].0.db2[a-z][a-z][a-z].* /backup/SBO*/[bB]* 2>/dev/null
 } | mymail "report backup $(hostname)" diogo.ti@malwee.com.br
 
