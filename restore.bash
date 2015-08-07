@@ -1,19 +1,27 @@
 #!/bin/bash
 
 # script to test restore in another machine
+
 set -e
 
 mount | grep -q /mnt/ecplockbox || {
   mount  -o  nolock,rsize=8192,wsize=8192,intr  datadomain02:/data/col1/ecplockbox  /mnt/ecplockbox  -t  nfs
 }
 
+su - db2ecp -c db2stop 
+
 [ ! -f /opt/ddbda/config/db2_ddbda.cfg -a -f /opt/ddbda/config/db2_ddbda.cfg.disabled ] && {
   echo Reativando configuracao /opt/ddbda/config/db2_ddbda.cfg.disabled "->" /opt/ddbda/config/db2_ddbda.cfg
   mv /opt/ddbda/config/db2_ddbda.cfg.disabled /opt/ddbda/config/db2_ddbda.cfg
 } || true
 
-time su - db2ecp -c "db2start && db2 restore db ECP load /usr/lib/ddbda/lib64/libddboostdb2.so \
-options @/opt/ddbda/config/db2_ddbda.cfg LOGTARGET /backup/logs_restore/ REPLACE EXISTING WITHOUT PROMPTING " || {
+time su - db2ecp -c "db2start && db2 restore db ECP \
+load /usr/lib/ddbda/lib64/libddboostdb2.so \
+open 4 sessions \
+options @/opt/ddbda/config/db2_ddbda.cfg \
+LOGTARGET /backup/logs_restore/ \
+REPLACE EXISTING \
+WITHOUT PROMPTING " || {
   echo Comando de restore retornou $?
 }
 
