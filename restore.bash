@@ -8,7 +8,7 @@ mount | grep -q /mnt/ecplockbox || {
   mount  -o  nolock,rsize=8192,wsize=8192,intr  datadomain02:/data/col1/ecplockbox  /mnt/ecplockbox  -t  nfs
 }
 
-su - db2ecp -c db2stop 
+su - db2ecp -c db2stop || true
 
 [ ! -f /opt/ddbda/config/db2_ddbda.cfg -a -f /opt/ddbda/config/db2_ddbda.cfg.disabled ] && {
   echo Reativando configuracao /opt/ddbda/config/db2_ddbda.cfg.disabled "->" /opt/ddbda/config/db2_ddbda.cfg
@@ -20,7 +20,9 @@ load /usr/lib/ddbda/lib64/libddboostdb2.so \
 open 4 sessions \
 options @/opt/ddbda/config/db2_ddbda.cfg \
 LOGTARGET /backup/logs_restore/ \
+WITH 3 BUFFERS \
 REPLACE EXISTING \
+PARALLELISM 2 \
 WITHOUT PROMPTING " || {
   echo Comando de restore retornou $?
 }
