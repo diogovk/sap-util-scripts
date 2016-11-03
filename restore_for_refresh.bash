@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-CREATE_INDEX_SQL_FILE=/db2/db2ecq/DDL_INDEX_MALWEE.sql
 set -e
 
 su - db2ecq -c env > /backup/variaveis_ambiente_pre_refresh$(date -I).txt
@@ -94,6 +93,18 @@ su - db2ecq -c "db2 \"update sapecp.usr02 set UFLAG=0 where BNAME='SAP*' and MAN
 su - db2ecq -c "db2 \"delete from sapecp.usr02 where BNAME='SAP*' and MANDT='300'\"";
 
 echo Criando Indices
-su - db2ecq -c "db2 -tvf $CREATE_INDEX_SQL_FILE";
+su - db2ecq -c 'db2 create index SAPECP.\"BKPF~Z09\"  on SAPECP.BKPF  \( \"MANDT\",\"AWSYS\" \) COLLECT SAMPLED DETAILED STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"COBK~Z09\"  on SAPECP.COBK  \( \"MANDT\",\"LOGSYSTEM\",\"AWSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"COEP~Z09\"  on SAPECP.COEP  \( \"MANDT\",\"LOGSYSO\",\"LOGSYSP\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"COES~Z09\"  on SAPECP.COES  \( \"MANDT\",\"AWSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"COFIS~Z09\" on SAPECP.COFIS \( \"RCLNT\",\"LOGSYS\",\"RLOGSYS\",\"SLOGSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"GLPCP~Z09\" on SAPECP.GLPCP \( \"RCLNT\",\"AWSYS\",\"LOGSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"GLPCT~Z09\" on SAPECP.GLPCT \( \"RCLNT\",\"LOGSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"MKPF~Z09\"  on SAPECP.MKPF  \( \"MANDT\",\"AWSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"VBFA~Z09\"  on SAPECP.VBFA  \( \"MANDT\",\"LOGSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"SRRELROLES~Z09\" on SAPECP.SRRELROLES \( \"CLIENT\",\"LOGSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+su - db2ecq -c 'db2 create index SAPECP.\"FAGLFLEXA~Z09\"  on SAPECP.FAGLFLEXA  \( \"RCLNT\",\"LOGSYS\" \) COLLECT SAMPLED DETAILED  STATISTICS' &
+
+wait
 
 #sap* pass
