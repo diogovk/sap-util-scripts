@@ -44,6 +44,9 @@ WITHOUT PROMPTING " || {
 du -hs /backup/logs_restore/
 
 su - db2ecq -c "db2 update db cfg for ECQ using MIRRORLOGPATH NULL"
+su - db2ecq -c "db2 update db cfg for ECQ using NUM_LOG_SPAN 0"
+su - db2ecq -c "db2 update db cfg for ECQ using MAX_LOG 0"
+
 
 # Remove o conf do DDBoost, pois ja houve caso em que
 # o mesmo travou o rollforward
