@@ -2,6 +2,9 @@
 
 
 set -e
+# Exportacao da configuracao SAP
+su - ecqadm -c 'R3trans -w EXPORTALL.log export_all.r3t'
+
 
 su - db2ecq -c env > /backup/variaveis_ambiente_pre_refresh$(date -I).txt
 su - db2ecq -c '/db2/db2ecq/sqllib/adm/db2set -all' > /backup/db2set_pre_refresh$(date -I).txt
@@ -110,4 +113,7 @@ su - db2ecq -c 'db2 create index SAPECP.\"FAGLFLEXA~Z09\"  on SAPECP.FAGLFLEXA  
 
 wait
 
+
+# Importacao da configuracao SAP
+su - ecqadm -c 'R3trans -w IMPORTALL.log import_ALL.r3t'
 #sap* pass
