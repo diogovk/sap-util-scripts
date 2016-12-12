@@ -49,6 +49,8 @@ du -hs /backup/logs_restore/
 su - db2ecq -c "db2 update db cfg for ECQ using MIRRORLOGPATH NULL"
 su - db2ecq -c "db2 update db cfg for ECQ using NUM_LOG_SPAN 0"
 su - db2ecq -c "db2 update db cfg for ECQ using MAX_LOG 0"
+su - db2ecq -c "db2 update db cfg for ECQ using LOGFILSIZ 27500"
+su - db2ecq -c "db2 update db cfg for ECQ using LOGPRIMARY 200"
 
 
 # Remove o conf do DDBoost, pois ja houve caso em que
@@ -59,6 +61,13 @@ time su - db2ecq -c "db2 rollforward db ECQ to end of logs and complete overflow
   echo Erro ao fazer rollforward
   exit 5
 }
+
+# verificar quais das configuracoes a seguir podem ser aplicadas antes do rollforward
+su - db2ecq -c "db2 update db cfg for ECQ using MIRRORLOGPATH NULL"
+su - db2ecq -c "db2 update db cfg for ECQ using NUM_LOG_SPAN 0"
+su - db2ecq -c "db2 update db cfg for ECQ using MAX_LOG 0"
+su - db2ecq -c "db2 update db cfg for ECQ using LOGFILSIZ 27500"
+su - db2ecq -c "db2 update db cfg for ECQ using LOGPRIMARY 200"
 
 su - db2ecq -c "db2 update db cfg for ECQ using LOGARCHMETH1 OFF" || true
 
